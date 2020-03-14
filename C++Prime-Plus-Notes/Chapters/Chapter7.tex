@@ -1,0 +1,80 @@
+% !TEX root = ../C++Prime-Plus-Notes.tex
+% !TeX encoding = UTF-8
+
+\chapter{函数——C++的编程模块}
+
+\addtocounter{section}{2}
+
+\section{函数和数组}
+
+\addtocounter{subsection}{1}
+
+\subsection{将数组作为参数意味着什么}
+
+如果你想在函数之间传递数组时，不要尝试同时传递数组指针和数组长度（就像\codeline{void\ \ }\\ \codeline{fillArray(int arr[size]);}这样），而应该将数组指针和数组长度作为两个分别的参数来传递，即应该\codeline{void fillArray(int arr[], int size);}，因为你传递的数组指针本身并不能说出整个数组有多长。
+
+\addtocounter{subsection}{1}
+
+\subsection{使用数组区间的函数}
+
+在上面的办法中，我们使用了一个指针来标识数组的开头，用另一个参数来标识数组长度，如果你对这种办法感到不满，也可以用双指针（一个标识数组开头，一个标识数组结尾）来传递数组，这样也可以达到一样的效果。但在这个过程中，你要记得对于比方说\codeline{int arr[size]}\\ 的数组来说，指针arr + size指向的是最后一个元素的后面一个的位置，指针arr + size - 1才指向最后一个元素。
+
+\subsection{指针和const}
+
+将const用于指针可以有两种办法，第一种是将指针指向一个常规变量，这样会使通过这个指针访问的地址内的值不可修改，第二种是将它设置成一个常量指针，这样会使你不能修改这个指针指向的地址。
+
+对于第一种情况，将一个指针指向一个常规变量，也就是\codeline{const int* pt = \&age}，这个常规变量age可以是const也可以不是const。对于const int age，反正大家都改不了，但对于int age，只有通过pt指针访问的age才不能改（也就是\fira{*}pt）。并且，你不能把一个const变量赋给一个没有const的指针，原因就是它本身就不准改。但当关系到了二层间接关系，情况就变得复杂了，这个时候你连将非const变量赋给带有const的指针都将变得违法，因为一旦允许，你就可以写出下面的代码：
+
+\begin{cpp}
+#include <iostream>
+
+int main(int argc, char|*| argv[]) {
+    const int |**|pt2;
+    int |*|pt1;
+    const int age = 22;
+    pt2 = !!&!!pt1;
+    |*|pt2 = !!&!!age;
+    |*|pt1 = 21;
+    return 0;
+}
+\end{cpp}
+
+上面这段程序是过不了编译的，编译器会告诉你\codeline{\textcolor{red!80}{error}: assigning to 'const\ \ }\\ \codeline{int **' from incompatible type 'int **'}，原因也很简单，在一层间接的规则下，你似乎可以用两层间接来合法修改一个const的值，这肯定是不被允许的，所以将一个非const变量赋给const指针在两层间接下会报错，这个行为也会影响数组，因为如果这是一个指针数组，它也需要解除两层引用，这个也被认为是两层引用，同样也会报错。当然，在你确定你的函数不需要修改传来的指针里的数据或者你想保护原始数据，尽量在指针前加上const。
+
+对于第二种情况，将一个指针设置成常量指针，也就是\codeline{int* const pt = \&age}，这样会使这个指针与age变量绑定，你就不能再修改pt指针指向的内存地址。
+
+当然，你也可以使用两个const，也就是\codeline{const int* const pt = \&age}，这个时候，不论pt还是\fira{*}pt都是const。
+
+\addtocounter{section}{5}
+
+\section{函数与array对象}
+
+对于一个指向array数组的指针，比如说\codeline{std::array<double, size>* pt}，如果要数组某一个元素的值，应该\codeline{(*pt)[i]}，因为\fira{*}pt为这种对象，(\fira{*}pt)[i]才是该对象里面的元素。
+
+\addtocounter{section}{1}
+
+\section{函数指针}
+
+\subsection{函数指针的基础知识}
+
+在C++中，函数也可以被当成参数传递，函数名就是函数的地址，只要你不带()，就不会call这个函数，而是代表这个函数所在的地址。同时，你也可以声明函数指针，比如对于函数\codeline{double pam(int)}，你可以声明一个形如\codeline{double (*pt)(int)}的函数指针，这里\fira{*}pt的括号不能省略，否则你就在定义一个返回值为double\fira{*}的函数。如果你有一个函数接收pt指针作为参数，那它的原型应形如\codeline{void estimate(int lines, double (*pt)(int}\\ \codeline{));}。对于一个指向函数的指针来说，你可以通过\codeline{(*pt)}来调用这个函数，也可以直接用pt来调用这个函数，对于这个问题，书上是这样解释的（为避免翻译造成的意义不准确，这里用了英文原版）：
+
+Holy syntax! How can pf and (\fira{*}pf) be equivalent? One school of thought maintains that because pf is a pointer to a function, \fira{*}pf is a function; hence, you should use (\fira{*}pf)() as a function call. A second school maintains that because the name of a function is a pointer to that function, a pointer to that function should act like the name of a function; hence you should use pf() as a function call. C++ takes the compromise view that both forms are correct, or at least can be allowed, even though they are logically inconsistent with each other. \uline{Before you judge that compromise too harshly, ref\/lect that the ability to hold views that are not logically self-consistent is a hallmark of the human mental process.}
+
+\addtocounter{subsection}{1}
+
+\subsection{深入探讨函数指针}
+
+对于一个很复杂的函数来说，你如果想声明一个指向这个函数的函数指针会变得十分复杂，就比方说对于如下三个函数：
+
+\begin{itemize}
+\item const double\fira{*} fun1(const double arr[], int size);
+\item const double\fira{*} fun2(const double\fira{*} arr, int size);
+\item const double\fira{*} fun3(const double [], int);
+\end{itemize}
+
+你如果想声明一个指向由这三个函数构成的一个数组（\codeline{const double* (*pa[3])(}\\ \codeline{const double*, int) = {fun1, fun2, fun3};}）的指针，这个指针的声明会变得十分复杂，正确的格式应该是\codeline{coust double* (*(*pt)[3])(const double*, int) =\ \ }\\ \codeline{\&pa;}，因为\fira{*}pt是这个数组，\fira{*}pt[1]是指向fun1的函数指针，而函数指针需要再解除一层引用，所以你可以通过\codeline{(*(*pt)[1](av, 3))}的方式来调用函数。当然，C++11有自动类型推断的功能，你也可以这样声明\codeline{auto pt = \&pa}，这能让你的工作变得简单，但你要保证你给的类型是你想要的。
+
+\subsection{使用typedef进行简化}
+
+如果你想多次声明一个类型，而它的类型名又太长，这时候你可以通过typedef进行简化，来创建一个类型别名，即\codeline{typedef typeName yourName}。

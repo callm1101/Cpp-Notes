@@ -1,0 +1,76 @@
+% !TEX root = ../C++Prime-Plus-Notes.tex
+% !TeX encoding = UTF-8
+
+\chapter{预备知识}
+
+\addtocounter{section}{3}
+
+\section{程序创建的技巧}
+
+\subsection{创建源代码文件}
+
+在不同的平台上对于编写的C++代码有不同的后缀名要求，见\tref{table:Suffix name}。
+
+\begin{table}[!hbt]
+\centering
+\begin{tabular}{p{18em}|p{18em}}
+\hline
+\stress{C++实现} & \stress{源代码文件的扩展名} \\
+\hline
+UNIX & C，cc，cxx，c \\
+\hline
+GUN C++ & C，cc，cxx，cpp，c++ \\
+\hline
+Digital Mars & cpp，cxx \\
+\hline
+Borland C++ & cpp \\
+\hline
+Watcom & cpp \\
+\hline
+Microsoft Visual C++ & cpp，cxx，cc \\
+\hline
+Freestyle CodeWarrior & cp，cpp，cc，cxx，c++ \\
+\hline
+\end{tabular}
+\caption{源代码文件的扩展名}
+\label{table:Suffix name}
+\end{table}
+
+\subsection{编译和链接}
+
+\stress{Linux}下的编译和链接一般用\href{http://gcc.gnu.org/}{\concept{g++}}，常用的参数有：
+
+\begin{description}
+\item[编译]
+\item[]
+\begin{enumerate}
+\item \codeline{g++ -E Test.cpp -o Test.i}，进行宏的替换，还有注释的消除，还有找到相关的库文件，生成.i文件。
+\item \codeline{g++ -S Test.cpp -o Test.s}，生成汇编文件，.s 文件。
+\item \codeline{g++ -c Test.cpp -o Test.o}，生成目标代码（即机器码）文件，.o文件。
+\end{enumerate}
+\item[链接]
+\item[]
+\begin{enumerate}
+\item \codeline{g++ Test.o -o Test.exe}，链接单个目标文件，生成可执行文件。
+\item \codeline{g++ Test1.o Test2.o Test3.o -o Test.exe}，链接多个目标文件，生成可执行文件。
+\end{enumerate}
+\item[命令参数]
+\item[]
+\begin{enumerate}
+\item \codeline{g++ -c main.cpp -o hello.o}，-o <filename>：输出对应名称的文件。
+\item \codeline{g++ -c main.cpp -I /usr/local -o hello.o}，-I <path>：把path指定的路径添加到头文件的搜索范围中。
+\end{enumerate}
+\end{description}
+
+其实Linux对于文件的后缀名没有强制规定，文件的后缀名只是提供了一个当没有指定的应用运行时能够提供默认应用的功能，对于这个文件本身来说并没有直接指定它的类型，Linux下可以通过\codeline{file}命令来查看文件类型。\dpar
+
+\stress{Windows}下的\href{http://www.mingw.org/}{\concept{MinGW}}其实就是\concept{GCC}的Windows版本。
+
+MinGW的全称是：Minimalist GNU on Windows。它实际上是将经典的开源C语言编译器GCC移植到了Windows平台下，并且包含了Win32API和MSYS，因此可以将源代码编译生成Windows下的可执行程序，又能如同在Linux平台下时，使用一些Windows不具备的开发工具。\dpar
+
+Debug版本和Release版本的区别：
+
+\begin{description}
+\item[Debug] 通常称为调试版本，通过一系列编译选项的配合，编译的结果通常包含调试信息，而且不做任何优化，以为开发 人员提供强大的应用程序调试能力。
+\item[Release] 通常称为发布版本，是给用户使用的，一般客户不允许在发布版本上进行调试。所以不保存调试信息，同时，它往往进行了各种优化，以期达到代码最小和速度最优。为用户的使用提供便利。
+\end{description}

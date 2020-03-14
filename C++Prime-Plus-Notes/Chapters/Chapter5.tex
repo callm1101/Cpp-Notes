@@ -1,0 +1,137 @@
+% !TEX root = ../C++Prime-Plus-Notes.tex
+% !TeX encoding = UTF-8
+
+\chapter{循环和关系表达式}
+
+\addtocounter{section}{3}
+
+\section{基于范围的for循环（C++11）}
+
+C++11新增了一种基于\stress{范围（ranged-based）}的for循环，这简化了对于数组或容器类（对于容器可能用迭代器会更好）的循环，即：
+
+\begin{cpp}
+#include <iostream>
+#include <vector>
+
+int main(int argc, char|*| argv[]) {
+    int arr[] = {1, 2, 3};
+    std::vector<std::string> vec = {"abc", "def"};
+    for (int i : arr) {
+        std::cout << i << std::endl; // 1 2 3
+    }
+    for (std::vector<std::string>::iterator itor = vec.begin();
+            itor != vec.end(); itor++) {
+        std::cout << |*|itor << std::endl; // abc def
+    }
+    return 0;
+}
+\end{cpp}
+
+\section{循环和文本输入}
+
+\subsection{使用原始的cin进行输入}
+
+这里底下都是要解决循环读取来自键盘的文本输入，并以一个你喜欢的方式结束读取的问题。你首先肯定想到利用while循环和某一个特殊字符来完成这个工作，即：
+
+\begin{cpp}
+#include <iostream>
+
+int main(int argc, char|*| argv[]) {
+    char ch;
+    std::cin >> ch;
+    while (ch != '#') {
+        std::cin >> ch;
+    }
+    return 0;
+}
+\end{cpp}
+
+上面的这个程序确实能够完成不断从键盘中读入文本，并以\#结束的工作，但你很容易发现，你没办法输入空格或者换行符，因为这些字符都会被cin过滤，你输入的信息会先送入缓冲区，当你按下回车，这些字符才会被发送给cin，这也就是你甚至能够在\#后面输入字符，虽然这并没有什么用。
+
+\subsection{使用cin.get(char)进行补救}
+
+如果你想逐个字符地检查，\codeline{std::cin.get(ch)}可以帮你实现这一点，它会读取输入流中的下一个字符，即使它是空格，即：
+
+\begin{cpp}
+#include <iostream>
+
+int main(int argc, char|*| argv[]) {
+    char ch;
+    std::cin.get(ch);
+    while (ch != '#') {
+        std::cin.get(ch);
+    }
+    return 0;
+}
+\end{cpp}
+
+\subsection{使用哪一个cin.get()}
+
+对于std::cin.get()这个函数到现在应该已经出现过了3个版本，总共有4个重载的版本：
+
+\begin{enumerate}
+\item int cin.get()
+\item istream\& cin.get(char\& var)
+\item istream\& cin.get(char\fira{*} s, streamsize n)
+\item istream\& cin.get(char\fira{*} s, streamsize n, char delim)。
+\end{enumerate}
+
+它们的作用我们前面已经分别讲过，其中streamsize在Linux下被定义为long int型，最后那个delim参数为中止字符，具体你可以看istream.tcc\footnote{linux下一般在\codeline{/usr/include/C+\/+/[0\~{}9]/istream.tcc}}这个文件里面那些好长的模板类函数。后面三个类型的返回值都是cin对象，也就是说，你能够写出像\codeline{std::cin.get(}\\ \codeline{ch1).get(ch2)}这种代码，它将两个字符连续地读入ch1和ch2。
+
+\subsection{文件尾条件}
+
+使用\#来结束输入总很难让人满意，因为你有的时候可能回想输入\#（其实就是不够优雅），这个时候你可以尝试使用\concept{检测文件尾（EOF）}的方法来告知程序结束输入。EOF是end of f\/ile的缩写，Wiki上对其的定义为a condition in a computer operating system where no more data can be read from a data source，就是文件尾的一个特殊标识符，当然你也可以通过键盘来模拟EOF，在Linux下是Ctrl + D，在Windows下是Ctrl + Z和Enter。在检测到EOF后，cin会将\concept{eof\/bit}和\concept{failbit}都设置为1，你可以通过\codeline{std::cin.eof()}和\codeline{std::cin.fail()}两个函数来监测是否达到了文件尾，如果eof-bit被设置为1，则eof()会返回bool值true，如果eof\/bit或failbit被设置为1，则fail()均会返回bool值true，使用fail()会比eof()更广泛，因为failbit还能监控到其他故障（磁盘故障）。
+
+当cin检测到EOF后，会设置eof\/bit和failbit，此后cin将会停止读取输入，再次调用也不管用（对于文件输入，这有助于程序读取不会超出文件尾）。但对于键盘输入，你可能后面想要再次调用cin，这时可以用\codeline{std::cin.clear()}来清除EOF标记，但在有些系统中，可能Ctrl + Z就会结束输入输出，用clear()也无法恢复。
+
+同时，由于std::cin.get(char)的返回值为cin，你可以将这个直接作为循环的条件，也就是说上面的while语句可以改写成\codeline{while (std::cin.get(ch))}，而且这样可以去掉while前和while内的get()语句。
+
+\subsection{另一个cin.get()版本}
+
+为了使用syd::cin.get()，需要知道它对于EOF的处理。当该函数到达EOF时，将返回一个用符号常量EOF表示的特殊值，通常这个值为-1，因为没有ASCII码为-1的字符，也就不会与任何输入的字符弄混，所以你只需要在程序中使用EOF即可。对于\codeline{std::cin.get()}\\ 和\codeline{std::cin.get(ch)}的区别，见\tref{table:cinget diff}。
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{p{12em}|p{12em}|p{12em}}
+\hline
+\stress{属性} & \stress{cin.get(ch)} & \stress{ch = cin.get()} \\
+\hline
+传递输入字符的方式 & 赋给参数ch & 将函数返回值赋给ch \\
+\hline
+用于字符输入时函数的返回值 & istream对象（执行bool转换后为true） & int型的字符编码 \\
+\hline
+到达EOF时函数的返回值 & istream对象（执行bool转换后为true） & EOF \\
+\hline
+\end{tabular}
+\caption{cin.get(ch)与cin.get()}
+\label{table:cinget diff}
+\end{table}
+
+有关能够让你完全正确输入的程序（针对那种不想好好的用你的程序而在键盘上狂敲EOF的用户），会在\secref{section:cinscore}给出。当然，你也可以用std::cin.get()函数来重写上面的程序，即：
+
+\begin{cpp}
+#include <iostream>
+
+int main(int argc, char|*| argv[]) {
+    char ch;
+    while ((ch = cin.get()) != EOF) {
+        // do something
+    }
+    return 0;
+}
+\end{cpp}
+
+对于上面程序的while判断中的\codeline{(ch = cin.get()) != EOF}，由于赋值语句的值就是左操作数的值，所以这里ch = cin.get()返回的就是ch的值，这也是这里为何可以进行判断的原因。
+
+\section{嵌套循环和二位数组}
+
+假设你现在有一个二位数组\codeline{int arr[4][5]}，你想访问里面的第3排第4列的那个元素，现在你有以下四种办法（排名不分先后）：
+
+\begin{itemize}
+\item arr[2][3]
+\item \fira{*}(arr + 2)[3]
+\item \fira{*}(\fira{*}(arr + 2) + 3)
+\item \fira{*}(\fira{*}arr + 13)
+\end{itemize}
+
+也就是说，对于一个二位数组，其实它的本质是一个有行数个元素的一维指针数组，其中每一个指针指向每行的有列数个元素的一位数组的第一个元素，所以对于二位数组名，它应该是一个指向一个指针数组的指针。

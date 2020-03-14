@@ -1,0 +1,93 @@
+% !TEX root = ../C++Prime-Plus-Notes.tex
+% !TeX encoding = UTF-8
+
+\chapter{分支语句和逻辑运算符}
+
+\addtocounter{section}{1}
+
+\section{逻辑表达式}
+
+\addtocounter{subsection}{2}
+
+\subsection{用\&\&来设置取值范围}
+
+如果你想判断一个值大于一个数并且小于一个数，不要把代码写成\codeline{0 < score < 100}\\ （当然如果是python你可以这么做也最好怎么做），因为编译器通过从左向右的结合法则会把上面的代码当成\codeline{(0 < score) < 100}来执行，也就是说不管如何前面表达式的值要么是0，要么是1，都会小于100，所以正确的方法应该是\codeline{socre > 0 \&\& score < 100}。
+
+\addtocounter{subsection}{2}
+
+\subsection{逻辑运算符细节}
+
+对于复合比较的语句，\&\&运算符的优先级要高于||的优先级，并且C++确保程序从左向右计算逻辑表达式，并且在知道答案后立即停止，也就是说你可以写出\codeline{x != 0 \&\& 1.0 /}\\ \codeline{x > 100}这样的代码而不用担心编译器会报错。
+
+\addtocounter{section}{1}
+
+\section{?:运算符}
+
+\concept{条件运算符（?:）}，又叫三元运算符，该运算符的通用格式为expression1 ? expression2 : expression3，当expression1为真时，表达式返回expression2的值，反之返回express-\\ ion3的值。
+
+\addtocounter{section}{1}
+
+\section{break和continue语句}
+
+break和continue语句都能使程序跳过当前循环中一部分代码，可以在switch语句中使用break语句来跳过剩余的case以及default，当\concept{break}用于循环中时，它会跳过循环的剩余部分去执行下面的语句，而\concept{continue}用于循环中时会跳过循环体的剩余部分，而开始新一轮的循环。当然，如果你偏爱goto，它也能完成工作，只是会降低代码的可读性罢了。
+
+\section{读取数字的循环}
+\label{section:cinscore}
+
+现在你接到了一个来自甲方的任务，是要写一个能够录入分数的程序，但你面向的客户也许根本不知道什么是键盘，所以你要保证你的程序不会有任何bug（因为书上在这段程序中用到了continue，所以在这里才讲到，但我感觉书上的程序还是有bug，所以我改写了一下）。
+
+\begin{cpp}
+#include <iostream>
+#include <limits>
+
+int main(int argc, char|*| argv[]) {
+    short score;
+    std::cin.sync();
+    while (!(std::cin >> score) !!||!! (score < 0 !!||!! score > 100) !!||!!
+            std::cin.get() != '\n') {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::
+            max(), '\n');
+        std::cout << "Invalid input!" << std::endl;
+    }
+    return 0;
+}
+\end{cpp}
+
+这里首先使用std::cin.sync()函数来清空cin缓冲区里面未读取的信息，接下来的!(std::\\ cin >> score)对应输入非法字符（包括检测到EOF）的情况，(score < 0 || score > 100)对应当你输入的分数不合法的情况，而std::cin.get != \leftqm\mybackslash n\rightqm 则会检查当你输入类似于像85c这样的字符时cin会帮你自动截断当成85的情况，一旦当你输入的类型有问题时，首先使用std::\\ cin.clear()来重置EOF改变的标志位，接着用std::cin.ignore(std::numeric\_limits<std::\\ streamsize>::max(), \leftqm\mybackslash n\rightqm);来清空缓冲区剩余的字符（这里使用numeric\_limits宏来获取输入流中字符数量上限，将\leftqm\mybackslash n\rightqm 作为delim告知函数清除到换行符），最后告知用户Invalid input!
+
+\section{简单文件输入/输出}
+
+\addtocounter{subsection}{2}
+
+\subsection{读取文本文件}
+
+当你用你定义的std::ifstream对象（暂且就叫它fcin）来打开文件时，可以使用\codeline{fcin.}\\ \codeline{is\_open()}来判断文件是否被正常地打开，如果文件被成功打开，方法is\_open()会返回true，反之则会返回false，如果你想让程序在打开文件失败后中止，你可以使用\concept{cstdlib}中定义地exit()函数，在该头文件中，还定义了一个用于通操作系统通信的宏EXIT\_FALIURE，也就是说，你可以使用\codeline{exit(EXIT\_FALIURE)}来终止程序。
+
+\begin{cpp}
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+
+int main(int argc, char|*| argv[]) {
+    char ch;
+    std::ifstream fcin;
+    fcin.open("file");
+    if (fcin.is_open() !!&&!! fcin.peek() != EOF) {
+        while ((ch = fcin.get()) != EOF) {
+            // do something
+        }
+    }
+    else {
+        exit(EXIT_FAILURE);
+    }
+    fcin.close();
+    return 0;
+}
+\end{cpp}
+
+在上面的程序中用到的peek()函数能够读取并返回下一个字符，但并不提取该字符到输入流中，也就是说你可以用这个函数来窥探输入流中的下一个字符，但并不将它提出。这里使用peek()函数来判断EOF而不用eof()函数是因为eof()返回true的条件是读到\concept{文件结束符(0xf\/f)}，而不是文件内容的最后一个字符，也就意味着用eof()来判断总会迟滞一位。如果你在这里的if判断用\codeline{fcin.eof()}，你会发现它无法判断出空文件，因为当你打开一个文件时，文件指针位置为0，并不是指向第1个字符，所以这里用的peek()会返回输入流中可用的下一个字符（就是文件指针指向的下一位），对于空文件来说就是EOF。
+
+如果你在这里的while判断用的是\codeline{!fcin.eof()}，而把fcin.get(ch)写在循环里，你会发现文件的最后一个字符被读取了两次，就是因为当输入流中的EOF被读入时并不会改变ch的值，而是将eof\/bit置为1。
+
+但如果你想输入的不是char型的话，peek()会表现很差，具体会在后面章节详细说明。
