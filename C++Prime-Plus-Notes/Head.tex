@@ -1,0 +1,199 @@
+% !TEX root = ./C++Prime-Plus-Notes.tex
+% !TeX encoding = UTF-8
+
+% 设置字号为五号,行距为1.5倍
+\documentclass[UTF8,a4paper,zihao=5,linespread=1.5]{ctexrep}
+
+% 定制页面版式的宏包
+\usepackage[a4paper,left=3cm,right=3cm, bottom=3cm,top=3cm]{geometry}
+
+% 设置字体为思源宋体
+\setmainfont{Source Han Serif SC}
+\setCJKmainfont{Source Han Serif SC}
+
+% 设置无衬线体为思源黑体
+\setsansfont{Source Han Sans SC}
+\setCJKsansfont{Source Han Sans SC}
+
+% 数学环境中使用楷体
+\setCJKmathfont{KaiTi}
+
+% 定义一些其他字体
+\newfontfamily{\firacode}{Fira Code}
+\newfontfamily{\consolas}{Consolas}
+\newfontfamily{\calibriitalic}{Calibri Italic}
+
+% 只改变CJK字体
+\setCJKfamilyfont{shheiti}{Source Han Sans SC}
+\newcommand{\shheiti}{\CJKfamily{shheiti}}
+
+% 定制日期时间格式的宏包
+\usepackage[yyyymmdd]{datetime}
+\renewcommand{\dateseparator}{.}
+
+% 设置整篇的行间距的最小值和最大值
+\setlength{\lineskiplimit}{3pt}
+\setlength{\lineskip}{3pt}
+
+% 强调和概念
+\newcommand{\stress}[1]{{\bfseries{#1}}}
+\newcommand{\concept}[1]{{\bfseries{#1}}}
+
+% 下划线和删除线宏包
+\usepackage[normalem]{ulem}
+
+% 自己定义的半角引号
+\newcommand{\leftqm}{\makebox[0.5em][r]{`}}
+\newcommand{\rightqm}{\makebox[0.5em][l]{'}}
+
+% 空两行
+\newcommand{\dpar}{\\ \mbox{}}
+
+% 一些其他的小定义
+\newcommand{\fira}[1]{{\firacode{#1}}}
+\newcommand{\mybackslash}{{\char92}}
+
+% 目录和章节样式
+\usepackage{titlesec}
+\usepackage{titletoc}
+
+% 设置目录样式
+\titlecontents{chapter}[3em]{\bfseries\normalsize}{\contentslabel{4.5em}}{}{\hfill\contentspage}[\vspace{0.5ex}]
+\titlecontents{section}[3em]{\normalsize}{\contentslabel{3em}}{}{\titlerule*[8pt]{$\cdot$}\contentspage}[\vspace{0.5ex}]
+\titlecontents{subsection}[7em]{\normalsize}{\contentslabel{4em}}{}{\titlerule*[8pt]{$\cdot$}\contentspage}[\vspace{0.5ex}]
+
+% 控制标题排序深度到subsection
+\setcounter{secnumdepth}{3}
+
+% 设置标题样式
+\titleformat{\chapter}[display]{\centering\LARGE\bfseries}{}{0.5em}{}
+\titleformat{\section}[hang]{\centering\Large\bfseries}{\bfseries\Large \S\ \thesection}{0.5em}{}
+\titleformat{\subsection}[hang]{\large\bfseries}{\bfseries\large \S\ \thesubsection}{0.5em}{}
+
+% 编号列表宏包，并自定义了三个列表
+\usepackage[inline]{enumitem}
+\setlist[enumerate]{font=\bfseries,itemsep=0pt}
+\setlist[itemize]{font=\bfseries,leftmargin=\parindent}
+\setlist[description]{font=\bfseries\uline,labelindent=\parindent,itemsep=0pt,parsep=0pt,topsep=0pt,partopsep=0pt}
+
+% 设置图表格式
+\usepackage{array,multirow,makecell,tabularx}
+
+% 设置图表跨页
+\usepackage{longtable}
+
+% 行高增加
+\setlength\extrarowheight{2pt}
+
+% 表格行距改为1.2倍
+\renewcommand\arraystretch{1.2}
+
+% 图片文字混排宏包
+\usepackage{graphicx,wrapfig}
+
+% 设置不需要浮动体的表格和图像标题
+\setlength{\abovecaptionskip}{7pt}
+\setlength{\belowcaptionskip}{1pt}
+
+% 引用名称定义
+\newcommand{\charef}[1]{第\ref{#1}章}
+\newcommand{\secref}[1]{\S\ref{#1}\ }
+\newcommand{\subsecref}[1]{\S\ref{#1}\ }
+\newcommand{\pref}[1]{第\pageref{#1}页}
+\newcommand{\fref}[1]{图\ref{#1}}
+\newcommand{\tref}[1]{表\ref{#1}}
+
+% 重定义图表名称
+\renewcommand{\tablename}{表}
+\renewcommand{\figurename}{图}
+
+% 数学必备宏包
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% 定理环境
+\usepackage{amsthm}
+\theoremstyle{definition}\newtheorem{laws}{Law}[section]
+\theoremstyle{plain}\newtheorem{ju}[laws]{Jury}
+\theoremstyle{remark}\newtheorem*{marg}{Margaret}
+
+% 使用线性代数字体
+\usepackage{mathrsfs}
+
+% 定义可能使用到的颜色
+\usepackage{xcolor}
+\definecolor{keywordscolor}{RGB}{94,94,255}
+
+% 复制代码时不复制行号
+\usepackage{accsupp}
+\newcommand{\emptyaccsupp}[1]{\BeginAccSupp{ActualText={}}#1\EndAccSupp{}}
+
+% 设置代码环境的盒子
+\usepackage{tcolorbox}
+\tcbuselibrary{listings,skins,breakable}
+
+% 设置代码环境样式
+\usepackage{listings}
+\lstset{
+    columns=spaceflexible,                                  % 设置行内单词间距的处理方式
+    frameround=tttt,                                        % 设置代码框为圆角
+    basicstyle=\firacode\shheiti,                           % 设置字体
+    numbers=left,                                           % 在左侧显示行号
+    numberstyle=\emptyaccsupp,                              % 复制代码不复制行号
+    frame=none,                                             % 不显示背景边框
+    backgroundcolor=\color{gray!10!white},                  % 设定背景颜色,与下面相同
+    keywordstyle=\color[RGB]{94,94,255},                    % 设定关键字颜色
+    numberstyle=\footnotesize\color[RGB]{107,107,107},      % 设定行号格式
+    commentstyle=\calibriitalic\kaishu\color[RGB]{0,96,96}, % 设置代码注释的格式
+    stringstyle=\color[RGB]{128,0,0},                       % 设置字符串格式
+    showstringspaces=false,                                 % 不显示字符串中的空格
+    emphstyle=\color[RGB]{112,64,160},                      % 设置强调词的颜色
+    language=c++,                                           % 设置语言为C++
+    moredelim=[is][\color{keywordscolor}\consolas]{|}{|},   % firacode中*有bug,改用consolas
+    moredelim=[is][\color{keywordscolor}\firacode]{!!}{!!}, % 手动设置&高亮
+    morekeywords={alignas,continue,friend,register,true,alignof,decltype,goto,
+    reinterpret_cast,try,asm,defult,if,return,typedef,auto,delete,inline,short,C++
+    typeid,bool,do,int,signed,typename,break,double,long,sizeof,union,case,
+    dynamic_cast,mutable,static,unsigned,catch,else,namespace,static_assert,using,
+    char,enum,new,static_cast,virtual,char16_t,char32_t,explict,noexcept,struct,
+    void,export,nullptr,switch,volatile,class,extern,operator,template,wchar_t,
+    const,false,private,this,while,constexpr,float,protected,thread_local,
+    const_cast,for,public,throw,std},
+    emph={map,set,multimap,multiset,unordered_map,unordered_set,
+    unordered_multiset,unordered_multimap,vector,string,list,deque,
+    array,stack,forwared_list,iostream,fstream,cstdlib,memory,shared_ptr,unique_ptr,random,
+    bitset,ostream,istream,cout,cin,wcout,wcin,endl,climits,limits,move,default_random_engine,
+    uniform_int_distribution,iterator,begin,end,algorithm,functional,bing,numeric}
+}
+
+% 设置行间代码环境
+\newtcbox{\codeline}[1][cyan]{
+    on line,before upper=\firacode\shheiti,arc=0pt,outer arc=0pt,colback=#1!10!white,colframe=#1!50!black,
+    boxsep=0pt,left=1pt,right=1pt,top=1pt,bottom=1pt,boxrule=0pt,bottomrule=1pt,toprule=1pt
+}
+
+% 设置C++代码环境的盒子
+\newtcblisting{cpp}{
+    breakable,skin=bicolor,colback=gray!10!white,colbacklower=white,colframe=white!50!black,listing only,
+    left=6mm,top=2pt,bottom=2pt,fontupper=\small,listing options={}
+}
+
+% 设置Python代码环境的盒子
+\newtcblisting{python}{
+    breakable,skin=bicolor,colback=gray!10!white,colbacklower=white,colframe=white!50!black,listing only,
+    left=6mm,top=2pt,bottom=2pt,fontupper=\small,listing options={language=python}
+}
+
+% 设置参考文献的格式
+\bibliographystyle{plain}
+
+% 将引用添加到目录
+\usepackage[numindex,notbib]{tocbibind}
+\usepackage[square,super,sort&compress]{natbib}
+
+% 设置引用
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,linkcolor=black,anchorcolor=black,citecolor=teal,urlcolor=teal,
+    bookmarksnumbered=true,pdftitle=C++ Prime Plus 学习笔记,pdfauthor=Calm Liu,pdfstartview=FitH
+}
