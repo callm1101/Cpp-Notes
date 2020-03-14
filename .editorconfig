@@ -1,0 +1,37 @@
+# Editor configuration, see https://editorconfig.org.
+
+root = true
+
+[*]
+charset = utf-8
+trim_trailing_whitespace = true
+
+[*.tex]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+insert_final_newline = true
+
+[*.bib]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+
+[*.md]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+insert_final_newline = true
+
+[*.bat]
+indent_style = space
+indent_size = 4
+end_of_line = crlf
+insert_final_newline = true
+
+[Makefile]
+indent_style = tab
+indent_size = 4
+end_of_line = lf
+insert_final_newline = true
