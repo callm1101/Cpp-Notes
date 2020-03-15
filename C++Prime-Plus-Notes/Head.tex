@@ -20,8 +20,8 @@
 
 % 定义一些其他字体
 \newfontfamily{\firacode}{Fira Code}
-\newfontfamily{\consolas}{Consolas}
-\newfontfamily{\calibriitalic}{Calibri Italic}
+\newfontfamily{\sourcesans}{Source Han Sans SC}
+\newfontfamily{\sourcecodeitalic}{Source Code Pro Italic}
 
 % 只改变CJK字体
 \setCJKfamilyfont{shheiti}{Source Han Sans SC}
@@ -135,22 +135,22 @@
 % 设置代码环境样式
 \usepackage{listings}
 \lstset{
-    columns=spaceflexible,                                  % 设置行内单词间距的处理方式
-    frameround=tttt,                                        % 设置代码框为圆角
-    basicstyle=\firacode\shheiti,                           % 设置字体
-    numbers=left,                                           % 在左侧显示行号
-    numberstyle=\emptyaccsupp,                              % 复制代码不复制行号
-    frame=none,                                             % 不显示背景边框
-    backgroundcolor=\color{gray!10!white},                  % 设定背景颜色,与下面相同
-    keywordstyle=\color[RGB]{94,94,255},                    % 设定关键字颜色
-    numberstyle=\footnotesize\color[RGB]{107,107,107},      % 设定行号格式
-    commentstyle=\calibriitalic\kaishu\color[RGB]{0,96,96}, % 设置代码注释的格式
-    stringstyle=\color[RGB]{128,0,0},                       % 设置字符串格式
-    showstringspaces=false,                                 % 不显示字符串中的空格
-    emphstyle=\color[RGB]{112,64,160},                      % 设置强调词的颜色
-    language=c++,                                           % 设置语言为C++
-    moredelim=[is][\color{keywordscolor}\consolas]{|}{|},   % firacode中*有bug,改用consolas
-    moredelim=[is][\color{keywordscolor}\firacode]{!!}{!!}, % 手动设置&高亮
+    columns=spaceflexible,                                     % 设置行内单词间距的处理方式
+    frameround=tttt,                                           % 设置代码框为圆角
+    basicstyle=\firacode\shheiti,                              % 设置字体
+    numbers=left,                                              % 在左侧显示行号
+    numberstyle=\emptyaccsupp,                                 % 复制代码不复制行号
+    frame=none,                                                % 不显示背景边框
+    backgroundcolor=\color{gray!10!white},                     % 设定背景颜色,与下面相同
+    keywordstyle=\color[RGB]{94,94,255},                       % 设定关键字颜色
+    numberstyle=\footnotesize\color[RGB]{107,107,107},         % 设定行号格式
+    commentstyle=\sourcecodeitalic\kaishu\color[RGB]{0,96,96}, % 设置代码注释的格式
+    stringstyle=\color[RGB]{128,0,0},                          % 设置字符串格式
+    showstringspaces=false,                                    % 不显示字符串中的空格
+    emphstyle=\color[RGB]{112,64,160},                         % 设置强调词的颜色
+    language=c++,                                              % 设置语言为C++
+    moredelim=[is][\color{keywordscolor}\sourcesans]{|}{|},    % FiraCode中*有bug,改用SourceHanSansSC
+    moredelim=[is][\color{keywordscolor}\firacode]{!!}{!!},    % 手动设置&高亮
     morekeywords={alignas,continue,friend,register,true,alignof,decltype,goto,
     reinterpret_cast,try,asm,defult,if,return,typedef,auto,delete,inline,short,C++
     typeid,bool,do,int,signed,typename,break,double,long,sizeof,union,case,
