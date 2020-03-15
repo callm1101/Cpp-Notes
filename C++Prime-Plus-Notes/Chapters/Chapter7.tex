@@ -23,7 +23,7 @@
 
 将const用于指针可以有两种办法，第一种是将指针指向一个常规变量，这样会使通过这个指针访问的地址内的值不可修改，第二种是将它设置成一个常量指针，这样会使你不能修改这个指针指向的地址。
 
-对于第一种情况，将一个指针指向一个常规变量，也就是\codeline{const int* pt = \&age}，这个常规变量age可以是const也可以不是const。对于const int age，反正大家都改不了，但对于int age，只有通过pt指针访问的age才不能改（也就是\fira{*}pt）。并且，你不能把一个const变量赋给一个没有const的指针，原因就是它本身就不准改。但当关系到了二层间接关系，情况就变得复杂了，这个时候你连将非const变量赋给带有const的指针都将变得违法，因为一旦允许，你就可以写出下面的代码：
+对于第一种情况，将一个指针指向一个常规变量，也就是\codeline{const int* pt = \&age}，这个常规变量age可以是const也可以不是const。对于const int age，反正大家都改不了，但对于int age，只有通过pt指针访问的age才不能改（也就是\thinspace\mbox{\fira{*}}pt）。并且，你不能把一个const变量赋给一个没有const的指针，原因就是它本身就不准改。但当关系到了二层间接关系，情况就变得复杂了，这个时候你连将非const变量赋给带有const的指针都将变得违法，因为一旦允许，你就可以写出下面的代码：
 
 \begin{cpp}
 #include <iostream>
@@ -43,13 +43,13 @@ int main(int argc, char|*| argv[]) {
 
 对于第二种情况，将一个指针设置成常量指针，也就是\codeline{int* const pt = \&age}，这样会使这个指针与age变量绑定，你就不能再修改pt指针指向的内存地址。
 
-当然，你也可以使用两个const，也就是\codeline{const int* const pt = \&age}，这个时候，不论pt还是\fira{*}pt都是const。
+当然，你也可以使用两个const，也就是\codeline{const int* const pt = \&age}，这个时候，不论pt还是\thinspace\mbox{\fira{*}}pt都是const。
 
 \addtocounter{section}{5}
 
 \section{函数与array对象}
 
-对于一个指向array数组的指针，比如说\codeline{std::array<double, size>* pt}，如果要数组某一个元素的值，应该\codeline{(*pt)[i]}，因为\fira{*}pt为这种对象，(\fira{*}pt)[i]才是该对象里面的元素。
+对于一个指向array数组的指针，比如说\codeline{std::array<double, size>* pt}，如果要数组某一个元素的值，应该\codeline{(*pt)[i]}，因为\thinspace\mbox{\fira{*}}pt为这种对象，(\fira{*}pt)[i]才是该对象里面的元素。
 
 \addtocounter{section}{1}
 
@@ -57,7 +57,7 @@ int main(int argc, char|*| argv[]) {
 
 \subsection{函数指针的基础知识}
 
-在C++中，函数也可以被当成参数传递，函数名就是函数的地址，只要你不带()，就不会call这个函数，而是代表这个函数所在的地址。同时，你也可以声明函数指针，比如对于函数\codeline{double pam(int)}，你可以声明一个形如\codeline{double (*pt)(int)}的函数指针，这里\fira{*}pt的括号不能省略，否则你就在定义一个返回值为double\fira{*}的函数。如果你有一个函数接收pt指针作为参数，那它的原型应形如\codeline{void estimate(int lines, double (*pt)(int}\\ \codeline{));}。对于一个指向函数的指针来说，你可以通过\codeline{(*pt)}来调用这个函数，也可以直接用pt来调用这个函数，对于这个问题，书上是这样解释的（为避免翻译造成的意义不准确，这里用了英文原版）：
+在C++中，函数也可以被当成参数传递，函数名就是函数的地址，只要你不带()，就不会call这个函数，而是代表这个函数所在的地址。同时，你也可以声明函数指针，比如对于函数\codeline{double pam(int)}，你可以声明一个形如\codeline{double (*pt)(int)}的函数指针，这里\thinspace\mbox{\fira{*}}pt的括号不能省略，否则你就在定义一个返回值为double\fira{*}的函数。如果你有一个函数接收pt指针作为参数，那它的原型应形如\codeline{void estimate(int lines, double (*pt)(int}\\ \codeline{));}。对于一个指向函数的指针来说，你可以通过\codeline{(*pt)}来调用这个函数，也可以直接用pt来调用这个函数，对于这个问题，书上是这样解释的（为避免翻译造成的意义不准确，这里用了英文原版）：
 
 Holy syntax! How can pf and (\fira{*}pf) be equivalent? One school of thought maintains that because pf is a pointer to a function, \fira{*}pf is a function; hence, you should use (\fira{*}pf)() as a function call. A second school maintains that because the name of a function is a pointer to that function, a pointer to that function should act like the name of a function; hence you should use pf() as a function call. C++ takes the compromise view that both forms are correct, or at least can be allowed, even though they are logically inconsistent with each other. \uline{Before you judge that compromise too harshly, ref\/lect that the ability to hold views that are not logically self-consistent is a hallmark of the human mental process.}
 
@@ -73,7 +73,7 @@ Holy syntax! How can pf and (\fira{*}pf) be equivalent? One school of thought ma
 \item const double\fira{*} fun3(const double [], int);
 \end{itemize}
 
-你如果想声明一个指向由这三个函数构成的一个数组（\codeline{const double* (*pa[3])(}\\ \codeline{const double*, int) = {fun1, fun2, fun3};}）的指针，这个指针的声明会变得十分复杂，正确的格式应该是\codeline{coust double* (*(*pt)[3])(const double*, int) =\ \ }\\ \codeline{\&pa;}，因为\fira{*}pt是这个数组，\fira{*}pt[1]是指向fun1的函数指针，而函数指针需要再解除一层引用，所以你可以通过\codeline{(*(*pt)[1](av, 3))}的方式来调用函数。当然，C++11有自动类型推断的功能，你也可以这样声明\codeline{auto pt = \&pa}，这能让你的工作变得简单，但你要保证你给的类型是你想要的。
+你如果想声明一个指向由这三个函数构成的一个数组（\codeline{const double* (*pa[3])(}\\ \codeline{const double*, int) = {fun1, fun2, fun3};}）的指针，这个指针的声明会变得十分复杂，正确的格式应该是\codeline{coust double* (*(*pt)[3])(const double*, int) =\ \ }\\ \codeline{\&pa;}，因为\thinspace\mbox{\fira{*}}pt是这个数组，\fira{*}pt[1]是指向fun1的函数指针，而函数指针需要再解除一层引用，所以你可以通过\codeline{(*(*pt)[1](av, 3))}的方式来调用函数。当然，C++11有自动类型推断的功能，你也可以这样声明\codeline{auto pt = \&pa}，这能让你的工作变得简单，但你要保证你给的类型是你想要的。
 
 \subsection{使用typedef进行简化}
 
