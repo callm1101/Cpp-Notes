@@ -120,11 +120,11 @@ f & 表示f\/loat 类型\\
 
 \subsection{char类型：字符和小整数}
 
-论\codeline{\mybackslash n}和\codeline{endl}的区别\footnote{具体可以查看\href{https://www.cnblogs.com/XqwKen/p/4564318.html}{endl与\mybackslash n的区别}这篇文章}：\mybackslash n仅代表换行的转义字符，endl除了代表换行，还紧跟着清出缓冲槽。
+论\codeline{\mybackslash n}和\codeline{endl}的区别\footnote{具体可以查看\thinspace\href{https://www.cnblogs.com/XqwKen/p/4564318.html}{endl与\mybackslash n的区别}这篇文章}：\mybackslash n仅代表换行的转义字符，endl除了代表换行，还紧跟着清出缓冲槽。
 
 cout的意思是console-output：控制台输出，就拿\codeline{cout << "Hello World!" <<\ }\\ \codeline{endl;}来说，cout代表后面的内容输出到控制台的一个缓冲槽，而不是控制台，当遇到endl或者其他f\/lush之类的命令或函数时，缓冲槽里的内容会按照顺序输出到控制台，再由控制台进行转义字符的识别打印。所以当你输入\codeline{cout << "Hello World!" << "\mybackslash n";}时，其实就相当于输入\codeline{cout << "Hello World!" << "\mybackslash n" <<  f\/lush;}，程序会自动刷新输出流，所以只要你程序不炸，用\mybackslash n比endl会快一点（不刷新输出流会快那么一点吧），但你如果程序够大并且明确要刷新输出流，就用endl吧。\dpar
 
-C++支持直接输入\href{https://home.unicode.org/}{\concept{Unicode}}码点，通用字符名可以以\codeline{\mybackslash u}或\codeline{\mybackslash U}打头，\mybackslash u后面跟的是4个十六进制位，\mybackslash U后面跟的是8个十六进制位，这里参见C++ prime plus英文版987页[There are two forms of UCN sequences. The first is \mybackslash u hexquad , where hexquad is a sequence of four hexadecimal digits; \mybackslash u00F6 is an example. The second is \mybackslash U hexquadhexquad ; \mybackslash U0000AC01 is an example. Because each hexadecimal digit corresponds to four bits, the \mybackslash u form can be used for codes representable by a 16-bit integer, and the \mybackslash U form can be used for codes representable by a 32-bit integer.]，中文译版在第52页写的是8个十六进制位和16个十六进制位，应该是写错了。
+C++支持直接输入\thinspace\href{https://home.unicode.org/}{\concept{Unicode}}\thinspace 码点，通用字符名可以以\codeline{\mybackslash u}或\codeline{\mybackslash U}打头，\mybackslash u后面跟的是4个十六进制位，\mybackslash U后面跟的是8个十六进制位，这里参见C++ prime plus英文版987页[There are two forms of UCN sequences. The first is \mybackslash u hexquad , where hexquad is a sequence of four hexadecimal digits; \mybackslash u00F6 is an example. The second is \mybackslash U hexquadhexquad ; \mybackslash U0000AC01 is an example. Because each hexadecimal digit corresponds to four bits, the \mybackslash u form can be used for codes representable by a 16-bit integer, and the \mybackslash U form can be used for codes representable by a 32-bit integer.]，中文译版在第52页写的是8个十六进制位和16个十六进制位，应该是写错了。
 
 \begin{cpp}
 #include <iostream>
@@ -151,9 +151,9 @@ int main(int argc, char|*| argv[]) {
 }
 \end{cpp}
 
-在这里我用的字符是U+262F[☯]，可以看到宽字符常量占4个字节，cout输出流将其视为4个1字节的字符常量（即0x0000262F），转换成十进制时会忽略前面的0，输出便是9775，这里wcout的输出就是ACSII码的第97个，也就是\mybackslash ，想让wcout的输出正确的Unicode字符相当复杂\footnote{具体可以查看\href{https://www.cnblogs.com/zyl910/archive/2013/01/20/wchar_crtbug_01.html}{cout，wcout无法正常输出中文字符问题的深入调查}这篇文章}，而且不同的编译器实现也都不一样（虽然C++标准制定的很好，那有人不遵守咋办嘛）。
+在这里我用的字符是U+262F[☯]，可以看到宽字符常量占4个字节，cout输出流将其视为4个1字节的字符常量（即0x0000262F），转换成十进制时会忽略前面的0，输出便是9775，这里wcout的输出就是ACSII码的第97个，也就是\mybackslash ，想让wcout的输出正确的Unicode字符相当复杂\footnote{具体可以查看\thinspace\href{https://www.cnblogs.com/zyl910/archive/2013/01/20/wchar_crtbug_01.html}{cout，wcout无法正常输出中文字符问题的深入调查}这篇文章}，而且不同的编译器实现也都不一样（虽然C++标准制定的很好，那有人不遵守咋办嘛）。
 
-Unicode到目前为止已经定义了17个平面，除了第一个基本平面（简称BMP\fref{figure:Unicode BMP}，其码点从U+0000到U+FFFF）用一个wcha\_t型存就会浪费两个字节，其他16个辅助平面（其码点从U+010000到U+10FFFD）用一个wcha\_t型刚好存下，如果你的程序用到了非常多的国际字符，用wcha\_t型可能就会存在空间浪费的情况（这里谈一下UTF-8吧，我觉得UTF-8流行的原因就是因为它兼顾了效率和容量，首先它实现了Unicode中的所有码点，其次它的变长编码保证了对于高频字符存储空间没有浪费，大概就像哈夫曼编码（Huffman Coding）一样吧），C++11中新增了\codeline{char16\_t}和\codeline{char32\_t}类型，这两种类型都是无符号的，其中前者长16位，后者长32位。C++11标准使用前缀u表示char16\_t类型字符常量和字符串常量（例如u\leftqm\mybackslash u262F\rightqm），用前缀U表示char32\_t类型字符常量和字符串常量（例如U\leftqm\mybackslash U0001F602\rightqm)，这两个类型应该和UTF-16编码和UTF-32编码相对应吧，但鉴于UTF-16是变长编码（好吧，就是两个字节根本不够用），\sout{我也不知道有没有关系}（在\href{https://github.com/google/styleguide}{Google风格指南}里明确了它们用于非UTF-8文本，但不推荐你使用这两个类型）。
+Unicode到目前为止已经定义了17个平面，除了第一个基本平面（简称BMP\fref{figure:Unicode BMP}，其码点从U+0000到U+FFFF）用一个wcha\_t型存就会浪费两个字节，其他16个辅助平面（其码点从U+010000到U+10FFFD）用一个wcha\_t型刚好存下，如果你的程序用到了非常多的国际字符，用wcha\_t型可能就会存在空间浪费的情况（这里谈一下UTF-8吧，我觉得UTF-8流行的原因就是因为它兼顾了效率和容量，首先它实现了Unicode中的所有码点，其次它的变长编码保证了对于高频字符存储空间没有浪费，大概就像哈夫曼编码（Huffman Coding）一样吧），C++11中新增了\codeline{char16\_t}和\codeline{char32\_t}类型，这两种类型都是无符号的，其中前者长16位，后者长32位。C++11标准使用前缀u表示char16\_t类型字符常量和字符串常量（例如u\leftqm\mybackslash u262F\rightqm），用前缀U表示char32\_t类型字符常量和字符串常量（例如U\leftqm\mybackslash U0001F602\rightqm)，这两个类型应该和UTF-16编码和UTF-32编码相对应吧，但鉴于UTF-16是变长编码（好吧，就是两个字节根本不够用），\sout{我也不知道有没有关系}（在\thinspace\href{https://github.com/google/styleguide}{Google风格指南}里明确了它们用于非UTF-8文本，但不推荐你使用这两个类型）。
 
 \begin{figure}[!hbt]
 \centering
@@ -223,15 +223,6 @@ C++11对于类型转换有一个表，编译器会查这个表进行类型转换
 将较大的浮点类型转换为较小的浮点类型，如将double转换为f\/loat & 精度（有效位数）降低，值可能超出目标类型的取值范围，在这种情况下，结果将是不确定的 \\
 \hline
 将浮点类型转换为整型 & 小数部分丢失，值可能超出目标类型的范围，在这种情况下，结果将是不确定的 \\
-\hline
-\end{tabular}
-\end{table}
-
-\mbox{}\dpar
-
-\begin{table}[!ht]
-\centering
-\begin{tabular}{p{18em}|p{18em}}
 \hline
 将较大的整型转换为较小的整型，如将long转换问short & 原来的值可能超出目标类型的取值范围，通常只复制右边的字节 \\
 \hline

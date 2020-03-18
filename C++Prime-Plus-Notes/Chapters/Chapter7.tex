@@ -43,7 +43,7 @@ int main(int argc, char|*| argv[]) {
 
 对于第二种情况，将一个指针设置成常量指针，也就是\codeline{int* const pt = \&age}，这样会使这个指针与age变量绑定，你就不能再修改pt指针指向的内存地址。
 
-当然，你也可以使用两个const，也就是\codeline{const int* const pt = \&age}，这个时候，不论pt还是\thinspace\mbox{\fira{*}}pt都是const。
+当然，你也可以使用两个const，也就是\codeline{const int* const pt = \&age}，这个时候，不论pt还是\thinspace\mbox{\fira{*}}pt都是const\footnote{具体可以参见\thinspace\href{https://en.wikipedia.org/wiki/Const_(computer_programming)}{const (computer programming)}\thinspace 这篇文章}。
 
 \addtocounter{section}{5}
 

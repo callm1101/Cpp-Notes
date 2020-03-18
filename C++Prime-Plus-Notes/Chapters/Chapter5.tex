@@ -7,7 +7,7 @@
 
 \section{基于范围的for循环（C++11）}
 
-C++11新增了一种基于\stress{范围（ranged-based）}的for循环，这简化了对于数组或容器类（对于容器可能用迭代器会更好）的循环，即：
+C++11新增了一种基于\stress{范围(ranged-based)}的for循环，这简化了对于数组或容器类（对于容器可能用迭代器会更好）的循环，即：
 
 \begin{cpp}
 #include <iostream>
@@ -80,7 +80,7 @@ int main(int argc, char|*| argv[]) {
 
 \subsection{文件尾条件}
 
-使用\#来结束输入总很难让人满意，因为你有的时候可能回想输入\#（其实就是不够优雅），这个时候你可以尝试使用\concept{检测文件尾（EOF）}的方法来告知程序结束输入。EOF是end of f\/ile的缩写，Wiki上对其的定义为a condition in a computer operating system where no more data can be read from a data source，就是文件尾的一个特殊标识符，当然你也可以通过键盘来模拟EOF，在Linux下是Ctrl + D，在Windows下是Ctrl + Z和Enter。在检测到EOF后，cin会将\concept{eof\/bit}和\concept{failbit}都设置为1，你可以通过\codeline{std::cin.eof()}和\codeline{std::cin.fail()}两个函数来监测是否达到了文件尾，如果eof-bit被设置为1，则eof()会返回bool值true，如果eof\/bit或failbit被设置为1，则fail()均会返回bool值true，使用fail()会比eof()更广泛，因为failbit还能监控到其他故障（磁盘故障）。
+使用\#来结束输入总很难让人满意，因为你有的时候可能回想输入\#（其实就是不够优雅），这个时候你可以尝试使用\concept{检测文件尾(EOF)}的方法来告知程序结束输入。EOF是end of f\/ile的缩写，Wiki上对其的定义为a condition in a computer operating system where no more data can be read from a data source，就是文件尾的一个特殊标识符，当然你也可以通过键盘来模拟EOF，在Linux下是Ctrl + D，在Windows下是Ctrl + Z和Enter。在检测到EOF后，cin会将\concept{eof\/bit}和\concept{failbit}都设置为1，你可以通过\codeline{std::cin.eof()}和\codeline{std::cin.fail()}两个函数来监测是否达到了文件尾，如果eof-bit被设置为1，则eof()会返回bool值true，如果eof\/bit或failbit被设置为1，则fail()均会返回bool值true，使用fail()会比eof()更广泛，因为failbit还能监控到其他故障（磁盘故障）。
 
 当cin检测到EOF后，会设置eof\/bit和failbit，此后cin将会停止读取输入，再次调用也不管用（对于文件输入，这有助于程序读取不会超出文件尾）。但对于键盘输入，你可能后面想要再次调用cin，这时可以用\codeline{std::cin.clear()}来清除EOF标记，但在有些系统中，可能Ctrl + Z就会结束输入输出，用clear()也无法恢复。
 
