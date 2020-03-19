@@ -82,12 +82,12 @@ ULLONG\_MAX & unsigned long long的最大值 \\
 
 \subsection{整型字面值}
 
-表示不同进制数的前缀，对于字符常量用\fira{\mybackslash}代替\fira{0}：
+表示不同进制数的前缀，对于字符常量用\thinspace\fira{\mybackslash}\thinspace 代替\thinspace\fira{0}\thinspace：
 
 \begin{itemize}
-\item 二进制以\fira{0b}开头
-\item 八进制以\fira{0}开头
-\item 十六进制以\fira{0x}开头
+\item 二进制以\thinspace\fira{0b}\thinspace 开头
+\item 八进制以\thinspace\fira{0}\thinspace 开头
+\item 十六进制以\thinspace\fira{0x}\thinspace 开头
 \end{itemize}
 
 \subsection{C++如何确定常量的类型}
@@ -120,9 +120,9 @@ f & 表示f\/loat 类型\\
 
 \subsection{char类型：字符和小整数}
 
-论\codeline{\mybackslash n}和\codeline{endl}的区别\footnote{具体可以查看\thinspace\href{https://www.cnblogs.com/XqwKen/p/4564318.html}{endl与\mybackslash n的区别}这篇文章}：\mybackslash n仅代表换行的转义字符，endl除了代表换行，还紧跟着清出缓冲槽。
+论\codeline{\mybackslash n}和\codeline{endl}的区别\footnote{具体可以查看\thinspace\href{https://www.cnblogs.com/XqwKen/p/4564318.html}{endl与\thinspace\mybackslash n的区别}这篇文章}：\mybackslash n仅代表换行的转义字符，endl除了代表换行，还紧跟着清出缓冲槽。
 
-cout的意思是console-output：控制台输出，就拿\codeline{cout << "Hello World!" <<\ }\\ \codeline{endl;}来说，cout代表后面的内容输出到控制台的一个缓冲槽，而不是控制台，当遇到endl或者其他f\/lush之类的命令或函数时，缓冲槽里的内容会按照顺序输出到控制台，再由控制台进行转义字符的识别打印。所以当你输入\codeline{cout << "Hello World!" << "\mybackslash n";}时，其实就相当于输入\codeline{cout << "Hello World!" << "\mybackslash n" <<  f\/lush;}，程序会自动刷新输出流，所以只要你程序不炸，用\mybackslash n比endl会快一点（不刷新输出流会快那么一点吧），但你如果程序够大并且明确要刷新输出流，就用endl吧。\dpar
+cout的意思是console-output：控制台输出，就拿\codeline{cout << "Hello World!" <<\ }\\ \codeline{endl;}来说，cout代表后面的内容输出到控制台的一个缓冲槽，而不是控制台，当遇到endl或者其他f\/lush之类的命令或函数时，缓冲槽里的内容会按照顺序输出到控制台，再由控制台进行转义字符的识别打印。所以当你输入\codeline{cout << "Hello World!" << "\mybackslash n";}时，其实就相当于输入\codeline{cout << "Hello World!" << "\mybackslash n" <<  f\/lush;}，程序会自动刷新输出流，所以只要你程序不炸，用\thinspace\mybackslash n比endl会快一点（不刷新输出流会快那么一点吧），但你如果程序够大并且明确要刷新输出流，就用endl吧。\dpar
 
 C++支持直接输入\thinspace\href{https://home.unicode.org/}{\concept{Unicode}}\thinspace 码点，通用字符名可以以\codeline{\mybackslash u}或\codeline{\mybackslash U}打头，\mybackslash u后面跟的是4个十六进制位，\mybackslash U后面跟的是8个十六进制位，这里参见C++ prime plus英文版987页[There are two forms of UCN sequences. The first is \mybackslash u hexquad , where hexquad is a sequence of four hexadecimal digits; \mybackslash u00F6 is an example. The second is \mybackslash U hexquadhexquad ; \mybackslash U0000AC01 is an example. Because each hexadecimal digit corresponds to four bits, the \mybackslash u form can be used for codes representable by a 16-bit integer, and the \mybackslash U form can be used for codes representable by a 32-bit integer.]，中文译版在第52页写的是8个十六进制位和16个十六进制位，应该是写错了。
 
