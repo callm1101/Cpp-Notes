@@ -84,7 +84,7 @@ int main(int argc, char|*| argv[]) {
 \label{figure:RAM}
 \end{figure}
 
-栈是向低地址扩展的数据结构，是一块连续的内存区域，这句话的意思是栈顶的地址和栈的最大容量是系统预先规定好的，当申请的空间超过栈的剩余空间时，将提示溢出。因此，用户能从栈获得的空间较小。堆是向高地址扩展的数据结构，是不连续的内存区域。因为系统是用链表来存储空闲内存地址的，且链表的遍历方向是由低地址向高地址。由此可见，堆获得的空间较灵活，也较大。栈中元素都是一一对应的，不会存在一个内存块从栈中间弹出的情况，这里再说下去要讲到C++里内存分配了，这些还是放到后面讲到malloc()的时候再说吧\footnote{具体可以查看\thinspace\href{https://www.cnblogs.com/zhaoosheLBJ/p/9281253.html}{Linux C 内存分配}这篇文章}。
+栈是向低地址扩展的数据结构，是一块连续的内存区域，这句话的意思是栈顶的地址和栈的最大容量是系统预先规定好的，当申请的空间超过栈的剩余空间时，将提示溢出。因此，用户能从栈获得的空间较小。堆是向高地址扩展的数据结构，是不连续的内存区域。因为系统是用链表来存储空闲内存地址的，且链表的遍历方向是由低地址向高地址。由此可见，堆获得的空间较灵活，也较大。栈中元素都是一一对应的，不会存在一个内存块从栈中间弹出的情况，这里再说下去要讲到C++里内存分配了，这些还是放到后面讲到malloc()的时候再说吧\footnote{具体可以参见\thinspace\href{https://www.cnblogs.com/zhaoosheLBJ/p/9281253.html}{Linux C 内存分配}这篇文章}。
 
 \subsection{指针的危险}
 
@@ -103,7 +103,7 @@ int main(int argc, char|*| argv[]) {
 
 这个程序能够正常过编译，但是运行时会报如下\codeline{[1] 14741 segmentation fault\ \ }\\ \codeline{./init\_ptr}的错误，其中14741代表进程号，而segmentation fault就是段错误，所谓的段错误就是指访问的内存超过了系统所给这个程序的内存空间，通常这个值是由gdtr（全局描述符寄存器）来保存的，它是一个48位的寄存器，其中的32位是保存由它指向的gdt表（全局描述符表），后13位保存相应于gdt的下标，最后3位包括了程序是否在内存中以及程序的在CPU中的运行级别,指向的gdt是由以64位为一个单位的表，在这张表中就保存着程序运行的代码段以及数据段的起始地址以及相应的断限和页面交换还有程序运行级别和内存粒度等信息，一旦一个程序发生了越界访问，CPU就会产生相应的异常保护，于是segmentation fault就出现了。
 
-有许多情况会导致SIGSEGV，上面一种就是引用了空指针导致访问了不存在的内存而报错\footnote{具体可以查看\thinspace\href{https://www.cnblogs.com/qiumingcheng/p/11254648.html}{Segmentation Fault错误原因总结}这篇文章}。
+有许多情况会导致SIGSEGV，上面一种就是引用了空指针导致访问了不存在的内存而报错\footnote{具体可以参见\thinspace\href{https://www.cnblogs.com/qiumingcheng/p/11254648.html}{Segmentation Fault错误原因总结}这篇文章}。
 
 \subsection{指针和数字}
 
