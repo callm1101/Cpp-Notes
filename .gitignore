@@ -275,6 +275,10 @@ TSWLatexianTemp*
 # Makeindex log files
 *.lpz
 
+# js
+node_modules
+package-lock.json
+
 # Others
 bulid.*
 

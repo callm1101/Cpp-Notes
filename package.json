@@ -1,0 +1,25 @@
+{
+    "name": "Cpp-Notes",
+    "version": "1.0.0",
+    "description": "C++ study notes",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/callm1101/Cpp-Notes"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "cz-conventional-changelog": "^3.1.0"
+    },
+    "scripts": {
+        "commit": "git-cz"
+    },
+    "keywords": [],
+    "author": "callm1101",
+    "license": "MIT",
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    }
+}
